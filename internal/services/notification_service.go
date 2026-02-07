@@ -5,15 +5,29 @@ import (
 	"uber/internal/domain/entities"
 )
 
+// NotificationService is a mock implementation that logs notifications.
+// In production, this would integrate with push notification services like
+// Firebase Cloud Messaging (FCM) for Android, Apple Push Notification Service
+// (APNs) for iOS, or a unified service like OneSignal.
+//
+// Go Learning Note — Mock/Stub Pattern:
+// Creating a simple struct with log-only implementations is a common Go pattern
+// for prototyping. The service still satisfies the expected method signatures,
+// so the rest of the codebase works without conditional logic. To swap in a
+// real implementation, you'd define an interface, have both the mock and real
+// implementations satisfy it, and inject the desired one at startup.
 type NotificationService struct {
 	// In a real implementation, this would have push notification clients
+	// (e.g., *fcm.Client, *apns.Client).
 }
 
+// NewNotificationService creates a mock notification service.
 func NewNotificationService() *NotificationService {
 	return &NotificationService{}
 }
 
-// NotifyDriverOfRideRequest sends a push notification to driver about a new ride request
+// NotifyDriverOfRideRequest sends a push notification to a driver about a new
+// ride request. The driver's app would display this with an accept/decline UI.
 func (s *NotificationService) NotifyDriverOfRideRequest(driverID string, ride *entities.Ride) {
 	log.Printf("[NOTIFICATION] Driver %s: New ride request %s from (%.4f, %.4f) to (%.4f, %.4f). Estimated fare: $%.2f",
 		driverID,
