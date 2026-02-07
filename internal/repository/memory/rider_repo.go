@@ -9,6 +9,9 @@ import (
 
 var ErrRiderNotFound = errors.New("rider not found")
 
+// RiderRepository is the in-memory rider store. Its structure mirrors
+// DriverRepository — all in-memory repos in this package follow the same
+// pattern: a map guarded by sync.RWMutex.
 type RiderRepository struct {
 	mu     sync.RWMutex
 	riders map[string]*entities.Rider
@@ -61,6 +64,8 @@ func (r *RiderRepository) Delete(ctx context.Context, id string) error {
 	return nil
 }
 
+// GetOrCreate returns an existing rider or auto-creates one with placeholder
+// data. This simplifies the MVP by not requiring a separate registration flow.
 func (r *RiderRepository) GetOrCreate(ctx context.Context, id string) (*entities.Rider, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
